@@ -1,6 +1,6 @@
 # Slack-Spotify-Bot
 
-This is a Slack bot that shows what you're currently listening to on Spotify. When mentioned with the trigger word "spotify", the bot will check if it has access to your Spotify account. If it doesn't, it will prompt you to authorize the app. If it does, it will use your access token to get the currently playing track and post a message in the Slack channel.
+This is a Slack bot that shows what you're currently listening to on Spotify. When mentioned with the trigger word "spotify", the bot will check if it has access to your Spotify account. If it doesn't, it will prompt you to authorize the app. If it does, it will use your access token to get the currently playing track and post a message in the Slack channel. This code sets up a Slack bot using the Slack Web API and Real-Time Messaging API, and uses the request-promise library to make requests to the Spotify Web API. The bot listens for messages in Slack channels that mention the bot with the trigger word "spotify", and checks if it has access to the user's Spotify account. If it doesn't, it prompts the user to authorize the app using the Spotify Accounts API. If it does, it gets the currently playing track from the Spotify Web API and posts a message in the Slack channel with the track name.
 
 ## Setup
 
