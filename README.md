@@ -42,6 +42,6 @@ To configure the Slack-Spotify-Bot, you'll need to set the following environment
 
 ## License
 
-The Slack-Spotify-Bot is licensed under the MIT License. See the LICENSE file for more information.
+The Slack-Spotify-Bot is licensed under the MIT License. See the [LICENSE file](https://github.com/ni5arga/slack-spotify-bot/blob/main/LICENSE) for more information.
 
 
