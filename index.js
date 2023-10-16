@@ -7,35 +7,35 @@ const rtm = new RTMClient(process.env.SLACK_BOT_TOKEN);
 let spotifyAccessToken = null;
 
 async function getCurrentlyPlayingTrack() {
-  const options = {
-    url: 'https://api.spotify.com/v1/me/player/currently-playing',
-    headers: { Authorization: `Bearer ${spotifyAccessToken}` },
-    json: true,
-  };
   try {
+    const options = {
+      uri: 'https://api.spotify.com/v1/me/player/currently-playing',
+      headers: { Authorization: `Bearer ${spotifyAccessToken}` },
+      json: true,
+    };
     const response = await request.get(options);
     return response.item.name;
   } catch (error) {
-    console.error(error);
+    console.error('Error getting currently playing track:', error);
     return null;
   }
 }
 
 async function authorizeSpotify(event) {
-  const options = {
-    url: 'https://accounts.spotify.com/api/token',
-    form: {
-      grant_type: 'authorization_code',
-      code: event.query.code,
-      redirect_uri: process.env.SPOTIFY_REDIRECT_URI,
-    },
-    headers: {
-      Authorization: `Basic ${Buffer.from(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`).toString('base64')}`,
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    json: true,
-  };
   try {
+    const options = {
+      uri: 'https://accounts.spotify.com/api/token',
+      form: {
+        grant_type: 'authorization_code',
+        code: event.query.code,
+        redirect_uri: process.env.SPOTIFY_REDIRECT_URI,
+      },
+      headers: {
+        Authorization: `Basic ${Buffer.from(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`).toString('base64')}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      json: true,
+    };
     const response = await request.post(options);
     spotifyAccessToken = response.access_token;
     const message = {
@@ -44,6 +44,7 @@ async function authorizeSpotify(event) {
     };
     await slackWebClient.chat.postMessage(message);
   } catch (error) {
+    console.error('Error authorizing Spotify:', error);
     const message = {
       channel: event.state.channel_id,
       text: 'Sorry, I could not authorize your Spotify account.',
@@ -63,11 +64,19 @@ rtm.on('message', async (event) => {
       await slackWebClient.chat.postMessage(message);
     } else {
       const trackName = await getCurrentlyPlayingTrack();
-      const message = {
-        channel: event.channel,
-        text: `You're currently listening to: ${trackName}`,
-      };
-      await slackWebClient.chat.postMessage(message);
+      if (trackName) {
+        const message = {
+          channel: event.channel,
+          text: `You're currently listening to: ${trackName}`,
+        };
+        await slackWebClient.chat.postMessage(message);
+      } else {
+        const message = {
+          channel: event.channel,
+          text: 'Unable to retrieve the currently playing track.',
+        };
+        await slackWebClient.chat.postMessage(message);
+      }
     }
   }
 });
