@@ -1,0 +1,17 @@
+{
+  "name": "slack-spotify-bot",
+  "version": "1.0.0",
+  "description": "A Slack bot that interacts with Spotify",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@slack/web-api": "^5.9.0",
+    "@slack/rtm-api": "^3.6.1",
+    "request-promise": "^4.2.6"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
